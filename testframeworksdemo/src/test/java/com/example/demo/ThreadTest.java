@@ -17,30 +17,47 @@ public class ThreadTest {
 	public void name() {
 		log.info("start");
 
+
 		CompletableFuture.runAsync(() -> {
-			log.info("in runnable");
+			log.info("Runnable1");
 			synchronized (this) {
 				try {
-					Thread.sleep(2000);
+					log.info("Runnable1 Sleeping");
+					Thread.sleep(3000);
 				} catch (InterruptedException e) {
-					log.info("in catch runnable");
+					log.info("Runnable1in catch runnable");
 				}
-				log.info("notify");
-				notify();
+				log.info("Runnable1 notify ");
+				notifyAll();
 			}
-			log.info("end runnable");
+			log.info("Runnable1 end");
 		});
+		CompletableFuture.runAsync(() -> {
+			log.info("Runnable2");
+			synchronized (this) {
+				try {
+					log.info("Runnable2 waiting ...");
+					wait();
+					log.info("Runnable2 end wait");
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			log.info("Runnable2 end");
+		});
+
 
 		synchronized (this) {
 			try {
-				log.info("waiting...");
+				Thread.sleep(1000);
+				log.info("MAIN waiting...");
 				wait();
-				log.info("end wait");
+				log.info("MAIN end wait");
 			} catch (InterruptedException e) {
-				log.info("in catch");
+				log.info("MAIN in catch");
 			}
 		}
 
-		log.info("end thread");
+		log.info("MAIN end thread");
 	}
 }
