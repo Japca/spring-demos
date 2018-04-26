@@ -12,6 +12,6 @@ public class Counter {
 	}
 
 	public int add() {
-		return count +=1;
+		return count += 1;
 	}
 }

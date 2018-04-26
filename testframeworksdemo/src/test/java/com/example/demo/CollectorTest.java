@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class CollectorTest extends AbstractTest {
 
-    private CsvReader reader = new CsvReader();
+	private CsvReader reader = new CsvReader();
 
 	List<Person> data;
 
@@ -27,7 +27,6 @@ public class CollectorTest extends AbstractTest {
 	public void setUp() throws Exception {
 		data = reader.getList();
 	}
-
 
 
 	@Test
@@ -52,16 +51,16 @@ public class CollectorTest extends AbstractTest {
 		System.out.println("data = " + collect);
 		System.out.println("min = " + min);
 		System.out.println("allMin = " + allMin);
-		
+
 	}
 
 	@Test
 	public void dropAndTakeTest() throws Exception {
 
 		List<Person> collect = data.stream()
-			//	.map(Person::getYear)
+				//	.map(Person::getYear)
 				.sorted(Comparator.comparingInt(Person::getYear))
-				.dropWhile(person -> person.getYear() <1959)
+				.dropWhile(person -> person.getYear() < 1959)
 				.takeWhile(person -> person.getYear() < 1969)
 				.distinct()
 				.collect(toList());
@@ -70,7 +69,7 @@ public class CollectorTest extends AbstractTest {
 		System.out.println("collect = " + collect);
 	}
 
-    @Test
+	@Test
 	public void math() throws Exception {
 		boolean anyMatch = data.stream()
 				.anyMatch(person -> person.getYear().equals(1968));
@@ -132,8 +131,8 @@ public class CollectorTest extends AbstractTest {
 				.collect(Collectors.mapping(Person::getYear, toList()));
 		String collectAndThen = data.stream()
 				.collect(
-				       		Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(Person::getYear)),
-				            (Optional<Person> person) -> person.isPresent() ? person.get().getLastName() : "none"));
+						Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(Person::getYear)),
+								(Optional<Person> person) -> person.isPresent() ? person.get().getLastName() : "none"));
 		System.out.println("collect = " + collectAndThen);
 	}
 

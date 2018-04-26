@@ -21,7 +21,7 @@ public class CsvReader {
 		File file = new ClassPathResource("MOCK_DATA.csv").getFile();
 		List<Person> data = new ArrayList<>();
 		try (FileReader fileReader = new FileReader(file);
-			BufferedReader br = new BufferedReader(fileReader)) {
+			 BufferedReader br = new BufferedReader(fileReader)) {
 			String line;
 			while ((line = br.readLine()) != null) {
 				String[] csvData = line.split(COMMA);

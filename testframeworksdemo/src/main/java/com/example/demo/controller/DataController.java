@@ -11,39 +11,36 @@ import java.util.List;
 
 /**
  * Created by Jakub krhovják on 7/3/17.
- *
  */
 @RestController
 public class DataController {
 
-    private static final String UNDERSCORE = "_";
+	private static final String UNDERSCORE = "_";
 
-    private List<Data> items = new LinkedList<>();
+	private List<Data> items = new LinkedList<>();
 
-    public DataController() {
-        items.add(createData("Item"));
-        items.add(createData("Data"));
-    }
+	public DataController() {
+		items.add(createData("Item"));
+		items.add(createData("Data"));
+	}
 
-    @RequestMapping(value = "/data")
-    public List<Data> data(@RequestParam(value="dummy") String dummy) {
-        return items;
-    }
+	@RequestMapping(value = "/data")
+	public List<Data> data(@RequestParam(value = "dummy") String dummy) {
+		return items;
+	}
 
-    private Data createData(String name) {
-        Data data = new Data(name);
-        data.put(name + UNDERSCORE + data.getId() + 1 ,  data.getId());
-        data.put(name + UNDERSCORE + data.getId() + 2,  data.getId());
-        return data;
-    }
-
-
-    @RequestMapping(value = "/schema")
-    public String schema() {
-        return "{ \"id\" : \"1\", \"array\":" +  new ArrayList<>() + "}";
-    }
+	private Data createData(String name) {
+		Data data = new Data(name);
+		data.put(name + UNDERSCORE + data.getId() + 1, data.getId());
+		data.put(name + UNDERSCORE + data.getId() + 2, data.getId());
+		return data;
+	}
 
 
+	@RequestMapping(value = "/schema")
+	public String schema() {
+		return "{ \"id\" : \"1\", \"array\":" + new ArrayList<>() + "}";
+	}
 
 
 }

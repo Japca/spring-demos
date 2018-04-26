@@ -54,7 +54,7 @@ public class Film {
 	}
 
 	public Film increasePlayedGoodExceptionally() {
-		 ++played;
+		++played;
 		GoodException exception = new GoodException("Good exception can continue", this);
 		return this;
 
@@ -64,7 +64,6 @@ public class Film {
 
 		throw new BadException("BAD exception STOP!!!");
 	}
-
 
 
 	public int decreasePlayed() {

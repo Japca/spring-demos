@@ -26,9 +26,9 @@ public class CompleteFutureTest extends AbstractTest {
 
 
 	List<Film> films = List.of(new Film("Dead Alien", 2000L),
-							   new Film("In the middle", 700L),
-							   new Film("short hand", 500L)
-								);
+			new Film("In the middle", 700L),
+			new Film("short hand", 500L)
+	);
 
 	private Film filmToWatch1500 = new Film("test1500", 1500L);
 	private Film filmToWatch1000 = new Film("test1000", 1000L);
@@ -47,7 +47,6 @@ public class CompleteFutureTest extends AbstractTest {
 				.collect(Collectors.toList());
 
 
-
 	}
 
 
@@ -56,12 +55,12 @@ public class CompleteFutureTest extends AbstractTest {
 		Film filmToWatch = new Film("test", 1500L);
 		System.out.println(filmToWatch);
 		CompletableFuture future = CompletableFuture.supplyAsync(() -> filmPlayer.watchFilm(filmToWatch))
-		.thenApply(film -> filmPlayer.watchFilm(filmToWatch))
-		.thenAccept(film -> System.out.println(film.getLength()));
+				.thenApply(film -> filmPlayer.watchFilm(filmToWatch))
+				.thenAccept(film -> System.out.println(film.getLength()));
 
 
 		Thread.sleep(1000L);
-        System.out.println("END !");
+		System.out.println("END !");
 		future.join();
 	}
 
@@ -107,7 +106,7 @@ public class CompleteFutureTest extends AbstractTest {
 		});
 		//future2.acceptEither(future1, Film::increasePlayed);
 		//future1.complete(filmToWatch);
-	//	future1.complete(filmToWatch3);
+		//	future1.complete(filmToWatch3);
 //		CompletableFuture.allOf(future1, future2);
 //		future1.complete(filmToWatch2);
 
@@ -115,13 +114,12 @@ public class CompleteFutureTest extends AbstractTest {
 		System.out.println("before in " + (System.nanoTime() - start) / 1_000_000);
 
 
-
 		Thread.sleep(1200L);
 		System.out.println(CompletableFuture.anyOf(future1, future2).get());
 //		System.out.println(future2.get());
 //		System.out.println(future1.get());
 		long duration = (System.nanoTime() - start) / 1_000_000;
-		System.out.println("END in " +  (System.nanoTime() - start) / 1_000_000);
+		System.out.println("END in " + (System.nanoTime() - start) / 1_000_000);
 
 	}
 
@@ -152,7 +150,7 @@ public class CompleteFutureTest extends AbstractTest {
 		System.out.println("before in " + (System.nanoTime() - start) / 1_000_000);
 
 		long duration = (System.nanoTime() - start) / 1_000_000;
-		System.out.println("END in " +  (System.nanoTime() - start) / 1_000_000);
+		System.out.println("END in " + (System.nanoTime() - start) / 1_000_000);
 
 		//Thread.sleep(1600L);
 		System.out.println(CompletableFuture.anyOf(future1, future2).get());
@@ -168,7 +166,7 @@ public class CompleteFutureTest extends AbstractTest {
 		Film filmToWatch = new Film("test1500", 1500L);
 		Film filmToWatch2 = new Film("test1000", 1000L);
 		Film filmToWatch3 = new Film("test1300", 1300L);
-	//	CompletableFuture<Film> future1 = CompletableFuture.supplyAsync(() -> filmPlayer.watchFilm(filmToWatch));
+		//	CompletableFuture<Film> future1 = CompletableFuture.supplyAsync(() -> filmPlayer.watchFilm(filmToWatch));
 
 
 		CompletableFuture<Integer> future2 = CompletableFuture.supplyAsync(() -> filmPlayer.watchFilm(filmToWatch2, true))
@@ -181,11 +179,10 @@ public class CompleteFutureTest extends AbstractTest {
 		System.out.println("END !");
 
 
-
 	}
 
 	private int handleGoodException(Throwable ex) {
-		if(ex instanceof GoodException) {
+		if (ex instanceof GoodException) {
 			return ((GoodException) ex).getFallbackValue().getPlayed();
 		}
 		throw new BadException("End of strory!");

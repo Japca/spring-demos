@@ -15,22 +15,22 @@ import static junit.framework.TestCase.assertTrue;
 
 /**
  * Created by Jakub krhovják on 7/4/17.
- *
  */
 public class TempusFugitTest {
 
-    @Rule
-    public ConcurrentRule concurrently = new ConcurrentRule();
+	@Rule
+	public ConcurrentRule concurrently = new ConcurrentRule();
 
-    @Rule public RepeatingRule repeatedly = new RepeatingRule();
-    private AtomicIdGenerator idGenerator = new AtomicIdGenerator();
+	@Rule
+	public RepeatingRule repeatedly = new RepeatingRule();
+	private AtomicIdGenerator idGenerator = new AtomicIdGenerator();
 
-    private Set<Long> ids = new HashSet<>(100);
+	private Set<Long> ids = new HashSet<>(100);
 
-    @Test
-    @Concurrent(count = 8)
-    @Repeating(repetition = 100)
-    public void idsShouldBeUnique() {
-        assertTrue(ids.add(idGenerator.nextId()));
-    }
+	@Test
+	@Concurrent(count = 8)
+	@Repeating(repetition = 100)
+	public void idsShouldBeUnique() {
+		assertTrue(ids.add(idGenerator.nextId()));
+	}
 }

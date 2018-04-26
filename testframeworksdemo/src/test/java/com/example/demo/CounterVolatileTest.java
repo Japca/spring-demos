@@ -19,11 +19,11 @@ public class CounterVolatileTest {
 	@Rule
 	public ConcurrentRule concurrently = new ConcurrentRule();
 
-	@Rule public RepeatingRule repeatedly = new RepeatingRule();
+	@Rule
+	public RepeatingRule repeatedly = new RepeatingRule();
 
 
-
-//	@Concurrent(count = 8)
+	//	@Concurrent(count = 8)
 	@Repeating(repetition = 10000)
 	@Test
 	public void synchronizedWorkingTest() {

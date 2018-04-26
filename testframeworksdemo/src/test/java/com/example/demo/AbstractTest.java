@@ -17,6 +17,6 @@ public abstract class AbstractTest {
 
 	@After
 	public void tearDown() throws Exception {
-		System.out.println("END test in " +  (System.nanoTime() - start) / 1_000_000);
+		System.out.println("END test in " + (System.nanoTime() - start) / 1_000_000);
 	}
 }

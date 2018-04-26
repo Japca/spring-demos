@@ -45,7 +45,6 @@ public class SynchronizedTest {
 	}
 
 
-
 	@Test
 	public void test3() throws ExecutionException, InterruptedException {
 		CompletableFuture<Integer> complete1 = CompletableFuture.supplyAsync(() -> firstInstance.a());

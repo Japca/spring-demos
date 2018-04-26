@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Jakub krhovják on 11/18/17.
  */
-public class VavrTest extends  AbstractTest {
+public class VavrTest extends AbstractTest {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
@@ -44,8 +44,8 @@ public class VavrTest extends  AbstractTest {
 		}
 	}
 
-	private int intWithException(boolean throwEx)  {
-		if(throwEx) {
+	private int intWithException(boolean throwEx) {
+		if (throwEx) {
 			throw new RuntimeException("int exception");
 		}
 		return 1;

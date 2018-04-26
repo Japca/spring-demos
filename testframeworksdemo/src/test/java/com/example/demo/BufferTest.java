@@ -28,7 +28,8 @@ public class BufferTest {
 	@Rule
 	public ConcurrentRule concurrently = new ConcurrentRule();
 
-	@Rule public RepeatingRule repeatedly = new RepeatingRule();
+	@Rule
+	public RepeatingRule repeatedly = new RepeatingRule();
 
 	ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
@@ -36,7 +37,7 @@ public class BufferTest {
 
 	int added;
 
-//	private List<Integer> numbers = new CopyOnWriteArrayList<>();
+	//	private List<Integer> numbers = new CopyOnWriteArrayList<>();
 //	private List<Integer> readNumbers = new ArrayList<>();
 	private int number = 0;
 
@@ -45,22 +46,22 @@ public class BufferTest {
 	public void bufferTest() throws Exception {
 		ConcurrentLinkedQueue<Integer> numbers = new ConcurrentLinkedQueue<>();
 
-	//	List<Integer> numbers = Collections.synchronizedList(new ArrayList<>());
+		//	List<Integer> numbers = Collections.synchronizedList(new ArrayList<>());
 		List<Integer> readNumbers = new ArrayList<>();
 		ScheduledFuture scheduledFuture =
-				scheduledExecutorService.scheduleWithFixedDelay(() -> 	{
-			    IntStream.range(0 , 10).forEach( i -> {
+				scheduledExecutorService.scheduleWithFixedDelay(() -> {
+					IntStream.range(0, 10).forEach(i -> {
 //					synchronized (this) {
 						numbers.add(++number);
 
 						++added;
 //					}
-				});
+					});
 
-				},0L,50, TimeUnit.MILLISECONDS);
+				}, 0L, 50, TimeUnit.MILLISECONDS);
 
 		ScheduledFuture scheduledFutureRead =
-				scheduledExecutorService2.scheduleWithFixedDelay( () -> {
+				scheduledExecutorService2.scheduleWithFixedDelay(() -> {
 //					synchronized (this) {
 					//readNumbers.addAll(numbers);
 					//numbers.clear();
@@ -68,7 +69,7 @@ public class BufferTest {
 					//	readNumbers.addAll(numbers);
 					//	numbers.clear();
 //					}
-				}, 0L,1, TimeUnit.MILLISECONDS);
+				}, 0L, 1, TimeUnit.MILLISECONDS);
 
 		Thread.sleep(400);
 		scheduledFuture.cancel(false);
@@ -131,18 +132,17 @@ public class BufferTest {
 
 		new Thread(() -> {
 			while (end == false) {
-				queueData.forEach(i ->resultQueueData.add(queueData.poll()));
+				queueData.forEach(i -> resultQueueData.add(queueData.poll()));
 			}
 
 		}).start();
 
 		Thread.sleep(1000);
 		//end = true;
-	//	Thread.sleep(100);
+		//	Thread.sleep(100);
 		System.out.println("SyncData: " + resultSyncData.size());
 		System.out.println("QueueData: " + resultQueueData.size());
 	}
-
 
 
 }

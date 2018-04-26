@@ -16,11 +16,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 public class AsyncController {
 
-    @RequestMapping(value = "/async", method = POST)
-    public Callable<Integer> stringBody(final @RequestBody Integer sleep) {
-        return () -> {
-            Thread.sleep(sleep);
-            return sleep;
-        };
-    }
+	@RequestMapping(value = "/async", method = POST)
+	public Callable<Integer> stringBody(final @RequestBody Integer sleep) {
+		return () -> {
+			Thread.sleep(sleep);
+			return sleep;
+		};
+	}
 }
