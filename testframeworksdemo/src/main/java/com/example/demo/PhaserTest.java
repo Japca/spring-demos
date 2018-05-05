@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.Phaser;
 import java.util.concurrent.TimeUnit;
 
@@ -28,17 +29,19 @@ public class PhaserTest {
 		log.info("Main Parties {}" , phaser.getRegisteredParties());
 		log.info("Main unarived {}" , phaser.getUnarrivedParties());
 		log.info("Phase: {} ", phaser.getPhase());
-		executorService.execute(task1);
-		executorService.execute(task2);
+		Future<?> submit1 = executorService.submit(task1);
+		Future<?> submit2 = executorService.submit(task2);
 		TimeUnit.SECONDS.sleep(5);
-		executorService.execute(task3);
+		Future<?> submit3 = executorService.submit(task3);
+
 //		log.info("Phase: {} ", phaser.getPhase());
 //		TimeUnit.SECONDS.sleep(2);
 //		log.info("Main Parties {}" , phaser.getRegisteredParties());
 //		log.info("Main unarived {}" , phaser.getUnarrivedParties());
 //		phaser.arriveAndDeregister();
 //		log.info("Phase: {} ", phaser.getPhase());
-//		log.info("End fmain thread");
+
+		log.info("End fmain thread");
 
 
 	}
@@ -83,6 +86,7 @@ class Task implements Runnable {
 
 
 		phaser.arriveAndAwaitAdvance();
+		phaser.arriveAndDeregister();
 
 		log.info("End thread: {} ", Thread.currentThread().getName());
 	}

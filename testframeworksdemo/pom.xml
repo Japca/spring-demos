@@ -45,12 +45,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.11</version>
-        </dependency>
-
-        <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>3.0.3</version>
@@ -108,6 +102,22 @@
             <artifactId>guava</artifactId>
             <version>24.1-jre</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.indeed</groupId>
+            <artifactId>util-serialization</artifactId>
+            <version>1.0.25</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
+
+
+
     </dependencies>
 
     <build>

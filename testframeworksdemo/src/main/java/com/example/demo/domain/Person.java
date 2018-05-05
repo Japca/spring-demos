@@ -15,6 +15,7 @@ public class Person {
 
 	private Integer year;
 
+
 	public Person(Long id, String firstName, String lastName, String country, Integer year) {
 		this.id = id;
 		this.firstName = firstName;
