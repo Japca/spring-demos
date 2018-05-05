@@ -4,6 +4,7 @@ import com.example.demo.domain.Film;
 import com.example.demo.exception.BadException;
 import com.example.demo.exception.GoodException;
 import com.example.demo.service.FilmPlayer;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -209,6 +213,56 @@ public class CompleteFutureTest extends AbstractTest {
 //		/CompletableFuture.allOf(firstFuture, secondFuture).join();
 		System.out.println(secondFuture.get());
 		System.out.println(firstFuture.get());
+
+	}
+
+	@Slf4j
+	static class SimpleTask implements Supplier<Integer> {
+
+		private final int value;
+
+
+		public SimpleTask(int value) {
+			this.value = value;
+		}
+
+		@Override
+		public Integer get() {
+			log.info("Counting result...");
+			try {
+				TimeUnit.SECONDS.sleep(value);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return value;
+		}
+	}
+
+	@Slf4j
+	static class Mutliplier implements Function<Integer, Integer> {
+
+		@Override
+		public Integer apply(Integer integer) {
+			log.info("Multiplying  result...");
+			try {
+				TimeUnit.SECONDS.sleep(integer);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+			return integer * integer;
+		}
+	}
+
+
+	@Test
+	public void thenApplyTest() throws ExecutionException, InterruptedException {
+
+        CompletableFuture.supplyAsync(new SimpleTask(2))
+	        	.thenApply(new Mutliplier())
+				.thenAccept(result -> log.info(" Result: {}", result))
+				.join();
+
 
 	}
 }
