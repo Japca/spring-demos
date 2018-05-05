@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -247,6 +248,7 @@ public class CompleteFutureTest extends AbstractTest {
 		public Integer get() {
 			log.info("Counting result...");
 			Sleep.sleep(value);
+			log.info("Counting result {}", value);
 			return value;
 		}
 	}
@@ -256,9 +258,23 @@ public class CompleteFutureTest extends AbstractTest {
 
 		@Override
 		public Integer apply(Integer integer) {
-			log.info("Multiplying  result...");
+			log.info("Multiplyingsing  result...");
+			Sleep.sleep(2);
+			integer *= integer;
+			log.info("Multiplaying result {}", integer);
+			return integer;
+		}
+	}
+
+	@Slf4j
+	static class Composer implements Function<Integer, CompletionStage<Integer>> {
+
+		@Override
+		public CompletionStage<Integer> apply(Integer integer) {
+			log.info("Composing  result...");
 			Sleep.sleep(integer);
-			return integer * integer;
+			integer *=integer;
+			return CompletableFuture.supplyAsync(new SimpleTask(integer));
 		}
 	}
 
@@ -268,14 +284,14 @@ public class CompleteFutureTest extends AbstractTest {
 
 		@Override
 		public Thread newThread(Runnable r) {
-			return new Thread(r, "ultiplier thread-" + value.incrementAndGet());
+			return new Thread(r, "Composed-executor-" + value.incrementAndGet());
 		}
 	}
 
 	@Test
 	public void thenApplyTest() throws ExecutionException, InterruptedException {
 
-		ExecutorService service = Executors.newCachedThreadPool(r -> new Thread(r, "Multiplier thread"));
+		ExecutorService service = Executors.newCachedThreadPool(new TestThreadFactory());
 
 
 		CompletableFuture.supplyAsync(new SimpleTask(2))
@@ -283,6 +299,24 @@ public class CompleteFutureTest extends AbstractTest {
 				.thenAccept(result -> log.info(" Result: {}", result))
 				.join();
 	}
+
+	@Test
+	public void thenComposeTest() {
+		ExecutorService service = Executors.newCachedThreadPool(new TestThreadFactory());
+		CompletableFuture.supplyAsync(new SimpleTask(2))
+				.thenCompose(value -> CompletableFuture.supplyAsync(() -> {
+					log.info("multiple * 3");
+					Sleep.sleep(5);
+				     int multiValue = value * 3;
+
+					log.info(" ResultBy3:  {}" , multiValue);
+					return multiValue;
+				}, service)
+				 .thenApplyAsync(new Mutliplier()))
+				.thenAccept(result -> log.info(" Result: {}", result))
+				.join();
+	}
+
 
 	@Test
 	public void threadNamingTest() {
