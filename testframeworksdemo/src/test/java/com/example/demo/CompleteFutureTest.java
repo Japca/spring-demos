@@ -4,6 +4,7 @@ import com.example.demo.domain.Film;
 import com.example.demo.exception.BadException;
 import com.example.demo.exception.GoodException;
 import com.example.demo.service.FilmPlayer;
+import com.google.code.tempusfugit.concurrency.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -13,8 +14,11 @@ import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -24,6 +28,19 @@ import static java.util.stream.Collectors.toList;
 /**
  * Created by Jakub krhovják on 11/11/17.
  */
+
+class Sleep {
+
+	static void sleep(int sleepInSecond) {
+		try {
+			TimeUnit.SECONDS.sleep(sleepInSecond);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+	}
+}
+
 public class CompleteFutureTest extends AbstractTest {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
@@ -229,11 +246,7 @@ public class CompleteFutureTest extends AbstractTest {
 		@Override
 		public Integer get() {
 			log.info("Counting result...");
-			try {
-				TimeUnit.SECONDS.sleep(value);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			Sleep.sleep(value);
 			return value;
 		}
 	}
@@ -244,25 +257,44 @@ public class CompleteFutureTest extends AbstractTest {
 		@Override
 		public Integer apply(Integer integer) {
 			log.info("Multiplying  result...");
-			try {
-				TimeUnit.SECONDS.sleep(integer);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
+			Sleep.sleep(integer);
 			return integer * integer;
 		}
 	}
 
+	static class TestThreadFactory extends DefaultThreadFactory {
+
+		AtomicInteger value = new AtomicInteger();
+
+		@Override
+		public Thread newThread(Runnable r) {
+			return new Thread(r, "ultiplier thread-" + value.incrementAndGet());
+		}
+	}
 
 	@Test
 	public void thenApplyTest() throws ExecutionException, InterruptedException {
 
-        CompletableFuture.supplyAsync(new SimpleTask(2))
-	        	.thenApply(new Mutliplier())
+		ExecutorService service = Executors.newCachedThreadPool(r -> new Thread(r, "Multiplier thread"));
+
+
+		CompletableFuture.supplyAsync(new SimpleTask(2))
+				.thenApplyAsync(new Mutliplier(), service)
 				.thenAccept(result -> log.info(" Result: {}", result))
 				.join();
+	}
 
-
+	@Test
+	public void threadNamingTest() {
+		ExecutorService service = Executors.newCachedThreadPool(new TestThreadFactory());
+		service.execute(() -> log.info("ahoj"));
+		Sleep.sleep(1);
+		service.execute(() -> {
+			log.info("ahoj");
+			Sleep.sleep(1);
+		});
+		service.execute(() -> log.info("ahoj"));
+		Sleep.sleep(2);
+		service.execute(() -> log.info("ahoj"));
 	}
 }
