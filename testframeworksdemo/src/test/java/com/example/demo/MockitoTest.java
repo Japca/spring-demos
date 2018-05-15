@@ -188,4 +188,6 @@ public class MockitoTest {
 		when(b.foo("1")).thenReturn(2);
 		assertThat(b.foo("1")).isEqualTo(2);
 	}
+
+
 }

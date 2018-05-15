@@ -1,8 +1,11 @@
 package com.example.demo.domain;
 
+import lombok.NoArgsConstructor;
+
 /**
  * Created by Jakub krhovják on 11/16/17.
  */
+@NoArgsConstructor
 public class Person {
 
 	private Long id;
@@ -15,6 +18,9 @@ public class Person {
 
 	private Integer year;
 
+	public String getCountryName() {
+		return  "";
+	}
 
 	public Person(Long id, String firstName, String lastName, String country, Integer year) {
 		this.id = id;

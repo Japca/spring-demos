@@ -10,6 +10,26 @@ import java.util.concurrent.ThreadFactory;
 /**
  * Created by Jakub Krhovják on 4/26/18.
  */
+
+@Slf4j
+class CustomExceptionHandler implements Thread.UncaughtExceptionHandler {
+
+	@Override
+	public void uncaughtException(Thread t, Throwable e) {
+		log.error("Exception:", e);
+	}
+}
+class CustomThreadFactory implements ThreadFactory {
+
+	@Override
+	public Thread newThread(Runnable r) {
+		Thread thread = new Thread(r);
+		thread.setUncaughtExceptionHandler(new CustomExceptionHandler());
+		return thread;
+	}
+}
+
+
 @Slf4j
 public class ThreadMain {
 
@@ -45,6 +65,14 @@ public class ThreadMain {
 		service.execute(() -> {
 			throw new RuntimeException("RuntimeException");
 		});
+
+		ExecutorService service2 = Executors.newCachedThreadPool(new CustomThreadFactory());
+		service2.execute(() -> {
+			throw new RuntimeException("RuntimeException2");
+		});
+
+		service.shutdown();
+		service2.shutdown();
 
 //			CompletableFuture.runAsync(() -> {
 //				throw new RuntimeException("RuntimeException");
