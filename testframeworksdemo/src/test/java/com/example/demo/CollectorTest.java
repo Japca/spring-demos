@@ -57,7 +57,7 @@ public class CollectorTest extends AbstractTest {
 	@Test
 	public void dropAndTakeTest() throws Exception {
 
-		List<Person> collect = data.stream()
+		List<Person> collect = data.parallelStream()
 				//	.map(Person::getYear)
 				.sorted(Comparator.comparingInt(Person::getYear))
 				.dropWhile(person -> person.getYear() < 1959)
